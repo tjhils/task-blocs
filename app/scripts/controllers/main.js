@@ -9,17 +9,14 @@
  */
 
 angular.module('taskBlocsApp')
-  .controller('MainCtrl', function ($scope, localStorageService) {
-    var todosInStore = localStorageService.get('todos');
-
-    $scope.todos = todosInStore && todosInStore.split('\n') || [];
-
-    $scope.$watch('todos', function() {
-      localStorageService.add('todos', $scope.todos.join('\n'));
-    }, true);
+  .controller('MainCtrl', function ($scope) {
+    $scope.todos = [];
 
     $scope.addTodo = function() {
+      var expirationDate = 'Test';
       $scope.todos.push($scope.todo);
+      $scope.todo.expirationdate = expirationDate;
+      console.log($scope.todo.expirationdate);
       $scope.todo = '';
     };
     $scope.removeTodo = function (index) {
