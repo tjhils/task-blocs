@@ -248,198 +248,201 @@ module.exports = function (grunt) {
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/styles/main.css': [
-    //         '.tmp/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '<%= yeoman.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
+     cssmin: {
+       dist: {
+         files: {
+           '<%= yeoman.dist %>/styles/main.css': [
+             '.tmp/styles/{,*/}*.css'
+           ]
+         }
+       }
+     },
+     uglify: {
+         options: {
+             mangle: false
+         },
+         dist: {
+             files: {
+                 '<%= yeoman.dist %>/scripts/scripts.js': [
+                     '<%= yeoman.dist %>/scripts/scripts.js'
+                 ]
+             }
+         }
+     },
+     concat: {
+         dist: {}
+     },
 
-    imagemin: {
-      dist: {
+     imagemin: {
+         dist: {
+             files: [{
+                 expand: true,
+                 cwd: '<%= yeoman.app %>/images',
+                 src: '{,*/}*.{png,jpg,jpeg,gif}',
+dest: '<%= yeoman.dist %>/images'
+}]
+}
+},
+
+svgmin: {
+dist: {
+files: [{
+expand: true,
+cwd: '<%= yeoman.app %>/images',
+src: '{,*/}*.svg',
+dest: '<%= yeoman.dist %>/images'
+}]
+}
+},
+
+htmlmin: {
+dist: {
+options: {
+collapseWhitespace: true,
+conservativeCollapse: true,
+collapseBooleanAttributes: true,
+removeCommentsFromCDATA: true,
+removeOptionalTags: true
+},
+files: [{
+expand: true,
+cwd: '<%= yeoman.dist %>',
+src: ['*.html', 'views/{,*/}*.html'],
+dest: '<%= yeoman.dist %>'
+}]
+}
+},
+
+// ngmin tries to make the code safe for minification automatically by
+// using the Angular long form for dependency injection. It doesn't work on
+// things like resolve or inject so those have to be done manually.
+ngmin: {
+    dist: {
         files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/images'
+            expand: true,
+            cwd: '.tmp/concat/scripts',
+            src: '*.js',
+            dest: '.tmp/concat/scripts'
         }]
-      }
-    },
+    }
+},
 
-    svgmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
-
-    htmlmin: {
-      dist: {
-        options: {
-          collapseWhitespace: true,
-          conservativeCollapse: true,
-          collapseBooleanAttributes: true,
-          removeCommentsFromCDATA: true,
-          removeOptionalTags: true
-        },
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.dist %>',
-          src: ['*.html', 'views/{,*/}*.html'],
-          dest: '<%= yeoman.dist %>'
-        }]
-      }
-    },
-
-    // ngmin tries to make the code safe for minification automatically by
-    // using the Angular long form for dependency injection. It doesn't work on
-    // things like resolve or inject so those have to be done manually.
-    ngmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '.tmp/concat/scripts',
-          src: '*.js',
-          dest: '.tmp/concat/scripts'
-        }]
-      }
-    },
-
-    // Replace Google CDN references
-    cdnify: {
-      dist: {
+// Replace Google CDN references
+cdnify: {
+    dist: {
         html: ['<%= yeoman.dist %>/*.html']
-      }
-    },
+    }
+},
 
-    // Copies remaining files to places other tasks can use
-    copy: {
-      dist: {
+// Copies remaining files to places other tasks can use
+copy: {
+    dist: {
         files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.app %>',
-          dest: '<%= yeoman.dist %>',
-          src: [
-            '*.{ico,png,txt}',
-            '.htaccess',
-            '*.html',
-            'views/{,*/}*.html',
-            'images/{,*/}*.{webp}',
-            'fonts/*'
-          ]
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.app %>',
+            dest: '<%= yeoman.dist %>',
+            src: [
+                '*.{ico,png,txt}',
+                '.htaccess',
+                '*.html',
+                'views/{,*/}*.html',
+        'images/{,*/}*.{webp}',
+        'fonts/*'
+            ]
         }, {
-          expand: true,
-          cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/images',
-          src: ['generated/*']
+            expand: true,
+            cwd: '.tmp/images',
+            dest: '<%= yeoman.dist %>/images',
+            src: ['generated/*']
         }, {
-          expand: true,
-          cwd: '.',
-          src: 'bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/*',
-          dest: '<%= yeoman.dist %>'
+            expand: true,
+            cwd: '.',
+            src: 'bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/*',
+            dest: '<%= yeoman.dist %>'
         }]
-      },
-      styles: {
+    },
+    styles: {
         expand: true,
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
-      }
-    },
+    }
+},
 
-    // Run some tasks in parallel to speed up the build process
-    concurrent: {
-      server: [
+// Run some tasks in parallel to speed up the build process
+concurrent: {
+    server: [
         'compass:server'
-      ],
-      test: [
+    ],
+    test: [
         'compass'
-      ],
-      dist: [
+    ],
+    dist: [
         'compass:dist',
         'imagemin',
         'svgmin'
-      ]
-    },
+    ]
+},
 
-    // Test settings
-    karma: {
-      unit: {
+// Test settings
+karma: {
+    unit: {
         configFile: 'test/karma.conf.js',
         singleRun: true
-      }
     }
+}
   });
 
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
-    if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive']);
-    }
+      if (target === 'dist') {
+          return grunt.task.run(['build', 'connect:dist:keepalive']);
+      }
 
-    grunt.task.run([
-      'clean:server',
-      'wiredep',
-      'concurrent:server',
-      'autoprefixer',
-      'connect:livereload',
-      'watch'
-    ]);
+      grunt.task.run([
+          'clean:server',
+          'wiredep',
+          'concurrent:server',
+          'autoprefixer',
+          'connect:livereload',
+          'watch'
+      ]);
   });
 
   grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
-    grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-    grunt.task.run(['serve:' + target]);
+      grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
+      grunt.task.run(['serve:' + target]);
   });
 
   grunt.registerTask('test', [
-    'clean:server',
-    'concurrent:test',
-    'autoprefixer',
-    'connect:test',
-    'karma'
+      'clean:server',
+      'concurrent:test',
+      'autoprefixer',
+      'connect:test',
+      'karma'
   ]);
 
   grunt.registerTask('build', [
-    'clean:dist',
-    'wiredep',
-    'useminPrepare',
-    'concurrent:dist',
-    'autoprefixer',
-    'concat',
-    'ngmin',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    'filerev',
-    'usemin',
-    'htmlmin'
+      'clean:dist',
+      'wiredep',
+      'useminPrepare',
+      'concurrent:dist',
+      'autoprefixer',
+      'concat',
+      'ngmin',
+      'copy:dist',
+      'cdnify',
+      'cssmin',
+      'uglify',
+      'filerev',
+      'usemin',
+      'htmlmin'
   ]);
 
   grunt.registerTask('default', [
-    'newer:jshint',
-    'test',
-    'build'
+      'newer:jshint',
+      'test',
+      'build'
   ]);
 };
